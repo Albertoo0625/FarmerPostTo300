@@ -317,11 +317,20 @@ namespace FarmerPostTo300.src
 
                             Console.WriteLine($"PayslipEarnUnitID: {payslipEarnUnitID}");
 
+                            string HierarchyIDQuery = @"select HierarchyID from [Tea_Auto].[Entity].[Hierarchy] where HierarchyCode= @HierarchyCode";
+                            SqlCommand cmd3 = new SqlCommand(HierarchyIDQuery, conn);
+                            cmd3.Parameters.AddWithValue("@HierarchyCode",hierarchyItem["HierarchyCode"]);
+
+                            object result3 = cmd3.ExecuteScalar();
+                            string hierarchyID = result3 != null ? result3.ToString() : string.Empty; // Handle null case
+
+                            Console.WriteLine($"HierarchyID: {hierarchyID}");
+
                             cmd.Parameters.AddWithValue("@PayslipEarnUnitID", payslipEarnUnitID);
                             cmd.Parameters.AddWithValue("@LevelDefinitionID", LevelId);
                             cmd.Parameters.AddWithValue("@LevelDefinitionSequence", LevelId);
                             cmd.Parameters.AddWithValue("@LevelSetupID", hierarchyCodeString);
-                            cmd.Parameters.AddWithValue("@HierarchyID", 1);
+                            cmd.Parameters.AddWithValue("@HierarchyID", hierarchyID);
                             cmd.Parameters.AddWithValue("@JobGradeID", 1);
                             cmd.Parameters.AddWithValue("@JobTitleTypeID", 1);
                             cmd.Parameters.AddWithValue("@UserID", "Admin");
